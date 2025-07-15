@@ -1,0 +1,31 @@
+[Unit]
+Description=Pickly Pi Photography Workflow Agent
+After=network.target multi-user.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/opt/pickly-pi/pi-agent
+ExecStart=/usr/bin/python3 /opt/pickly-pi/pi-agent/main.py /opt/pickly-pi/pi-agent/config.json
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=pickly-pi-agent
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/media /tmp /var/log/pickly-pi /opt/pickly-pi
+
+# Environment
+Environment=PYTHONPATH=/opt/pickly-pi/pi-agent
+
+[Install]
+WantedBy=multi-user.target

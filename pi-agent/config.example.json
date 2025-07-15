@@ -1,0 +1,32 @@
+{
+  "smb": {
+    "server": "192.168.1.101",
+    "share": "leys",
+    "username": "leys",
+    "password": "leys",
+    "domain": "",
+    "port": 445
+  },
+  "paths": {
+    "sd_mount_base": "/media/pi",
+    "temp_dir": "/tmp/pickly-transfer",
+    "remote_base_path": "/incoming"
+  },
+  "transfer": {
+    "chunk_size": 1048576,
+    "max_retries": 3,
+    "retry_delay": 5,
+    "verify_checksums": true
+  },
+  "monitoring": {
+    "poll_interval": 2,
+    "supported_extensions": [".CR2", ".NEF", ".ARW", ".RAF", ".ORF", ".DNG", ".JPG", ".JPEG"],
+    "min_file_size": 1000000
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "/var/log/pickly-pi/agent.log",
+    "max_size": "10MB",
+    "backup_count": 5
+  }
+}

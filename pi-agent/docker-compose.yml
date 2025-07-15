@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  pickly-pi-agent:
+    build: .
+    container_name: pickly-pi-agent
+    restart: unless-stopped
+    
+    # Mount SD card directory and config
+    volumes:
+      - /media:/media:ro                    # SD card mount points (read-only)
+      - ./config.json:/app/config/config.json:ro  # Configuration file
+      - ./logs:/app/logs                    # Log output directory
+      - /tmp:/app/temp                      # Temporary files
+    
+    # Access to USB devices for SD card detection
+    devices:
+      - /dev:/dev
+    
+    # Privileged mode for hardware access
+    privileged: true
+    
+    # Network access for SMB connections
+    network_mode: host
+    
+    # Environment variables
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
