@@ -27,7 +27,12 @@ cp -r ./* "$INSTALL_PATH/pi-agent/"
 # Install Python dependencies
 echo "Installing Python dependencies..."
 cd "$INSTALL_PATH/pi-agent"
-pip3 install -r requirements.txt
+
+# Create virtual environment
+echo "Creating virtual environment..."
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 
 # Setup configuration
 if [ ! -f "$INSTALL_PATH/pi-agent/config.json" ]; then
@@ -52,7 +57,7 @@ if [ "$SERVICE_INSTALL" = true ]; then
     echo "View logs with: sudo journalctl -u pickly-pi-agent -f"
 else
     echo "Service installation skipped (not root)"
-    echo "Run manually with: cd $INSTALL_PATH/pi-agent && python3 main.py"
+    echo "Run manually with: cd $INSTALL_PATH/pi-agent && source venv/bin/activate && python3 main.py"
 fi
 
 # Set permissions
@@ -69,7 +74,7 @@ echo "Installation complete!"
 echo ""
 echo "Next steps:"
 echo "1. Edit configuration: $INSTALL_PATH/pi-agent/config.json"
-echo "2. Test the configuration: cd $INSTALL_PATH/pi-agent && python3 main.py"
+echo "2. Test the configuration: cd $INSTALL_PATH/pi-agent && source venv/bin/activate && python3 main.py"
 if [ "$SERVICE_INSTALL" = true ]; then
     echo "3. Start the service: sudo systemctl start pickly-pi-agent"
 fi

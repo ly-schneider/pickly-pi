@@ -8,7 +8,7 @@ Type=simple
 User=pi
 Group=pi
 WorkingDirectory=/opt/pickly-pi/pi-agent
-ExecStart=/usr/bin/python3 /opt/pickly-pi/pi-agent/main.py /opt/pickly-pi/pi-agent/config.json
+ExecStart=/opt/pickly-pi/pi-agent/venv/bin/python /opt/pickly-pi/pi-agent/main.py /opt/pickly-pi/pi-agent/config.json
 Restart=always
 RestartSec=10
 
