@@ -46,10 +46,10 @@ if [ "$SERVICE_INSTALL" = true ]; then
     echo "Installing systemd service..."
     
     # Detect the default user (fallback to pi if it exists, otherwise use the first non-root user)
-    SERVICE_USER="pi"
+    SERVICE_USER="leys"
     if ! id "$SERVICE_USER" &>/dev/null; then
         SERVICE_USER=$(getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 { print $1; exit }')
-        echo "User 'pi' not found, using '$SERVICE_USER' instead"
+        echo "User 'leys' not found, using '$SERVICE_USER' instead"
     fi
     
     # Update service file with correct paths and user
