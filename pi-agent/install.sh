@@ -45,8 +45,17 @@ fi
 if [ "$SERVICE_INSTALL" = true ]; then
     echo "Installing systemd service..."
     
-    # Update service file paths if needed
+    # Detect the default user (fallback to pi if it exists, otherwise use the first non-root user)
+    SERVICE_USER="pi"
+    if ! id "$SERVICE_USER" &>/dev/null; then
+        SERVICE_USER=$(getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 { print $1; exit }')
+        echo "User 'pi' not found, using '$SERVICE_USER' instead"
+    fi
+    
+    # Update service file with correct paths and user
     sed -i "s|/opt/pickly-pi|$INSTALL_PATH|g" pickly-pi-agent.service
+    sed -i "s|User=pi|User=$SERVICE_USER|g" pickly-pi-agent.service
+    sed -i "s|Group=pi|Group=$SERVICE_USER|g" pickly-pi-agent.service
     
     cp pickly-pi-agent.service /etc/systemd/system/
     systemctl daemon-reload
@@ -62,12 +71,12 @@ fi
 
 # Set permissions
 if [ "$SERVICE_INSTALL" = true ]; then
-    chown -R pi:pi "$INSTALL_PATH"
+    chown -R $SERVICE_USER:$SERVICE_USER "$INSTALL_PATH"
     chmod +x "$INSTALL_PATH/pi-agent/main.py"
     
     # Create log directory
     mkdir -p /var/log/pickly-pi
-    chown pi:pi /var/log/pickly-pi
+    chown $SERVICE_USER:$SERVICE_USER /var/log/pickly-pi
 fi
 
 echo "Installation complete!"
